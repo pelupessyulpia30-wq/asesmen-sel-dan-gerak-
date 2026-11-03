@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asesmen Biologi Interaktif - SMAS Alhilaal Tehoru</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icon CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emeraldCustom: '#10B981',
+                        emeraldDark: '#047857',
+                        skyCustom: '#0284C7',
+                        skyDark: '#0369A1',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .quiz-option-btn:hover { border-color: #10B981; background-color: #ecfdf5; }
+        .quiz-option-btn.selected { border-color: #10B981; background-color: #d1fae5; font-weight: 600; }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between bg-slate-50 text-slate-800">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="bg-gradient-to-r from-emeraldDark via-emerald-600 to-skyCustom text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center space-x-3 text-center md:text-left">
+                <div class="bg-white text-emerald-700 p-2.5 rounded-full shadow-inner flex items-center justify-center w-12 h-12">
+                    <i class="fa-solid fa-dna text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-bold tracking-tight">Asesmen Biologi Interaktif</h1>
+                    <p class="text-xs text-emerald-100">SMAS Alhilaal Tehoru &bull; Guru Pengampu: <span class="font-semibold text-white">Ulpia Pelupessy, S.Pd.</span></p>
+                </div>
+            </div>
+            <!-- Mode Toggle & Navigation Buttons -->
+            <div class="flex items-center space-x-2 bg-black/20 p-1.5 rounded-xl backdrop-blur-sm no-print">
+                <button onclick="switchView('landing')" id="nav-landing" class="px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-medium transition flex items-center space-x-1.5 bg-white text-emerald-800 shadow">
+                    <i class="fa-solid fa-graduation-cap"></i> <span>Mode Siswa</span>
+                </button>
+                <button onclick="switchView('teacher')" id="nav-teacher" class="px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-medium hover:bg-white/20 transition flex items-center space-x-1.5 text-white">
+                    <i class="fa-solid fa-chalkboard-user"></i> <span>Dashboard Guru</span>
+                </button>
+                <button onclick="showGuideModal()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-400 hover:bg-amber-300 text-slate-900 transition flex items-center space-x-1">
+                    <i class="fa-solid fa-circle-info"></i> <span class="hidden sm:inline">Panduan</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- 1. LANDING & REGISTRATION PAGE -->
+        <section id="view-landing" class="space-y-6">
+            <!-- Hero / Welcome Banner -->
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200/80 relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 text-slate-100 opacity-50 pointer-events-none">
+                    <i class="fa-solid fa-microscope text-9xl"></i>
+                </div>
+                <div class="max-w-3xl relative z-10 space-y-3">
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+                        <i class="fa-solid fa-check-circle mr-1"></i> Asesmen Interaktif Biologi SMA
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900">Selamat Datang di Platform Asesmen Biologi</h2>
+                    <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+                        Sistem penilaian berbasis komputer ini dirancang untuk mengukur tingkat penguasaan konsep Biologi pada materi <strong>Sel</strong> dan <strong>Sistem Gerak Manusia</strong>. Hasil penilaian pilihan ganda akan dihitung secara otomatis dan langsung memberikan umpan balik ketuntasan belajar Anda.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Grid Layout: Petunjuk & Form Pendaftaran -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Petunjuk Pengerjaan -->
+                <div class="lg:col-span-5 bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center text-emerald-700">
+                            <i class="fa-solid fa-list-check mr-2"></i> Petunjuk Pengerjaan Asesmen
+                        </h3>
+                        <ol class="space-y-3 text-xs md:text-sm text-slate-600 list-decimal list-inside leading-relaxed">
+                            <li class="pl-1"><span class="font-medium text-slate-800">Isi Formulir Identitas</span> dengan benar (Nama Lengkap, Kelas, dan Nomor Absen).</li>
+                            <li class="pl-1"><span class="font-medium text-slate-800">Pilih salah satu materi ujian</span> (Materi Sel atau Sistem Gerak Manusia).</li>
+                            <li class="pl-1">Setiap paket ujian terdiri atas <span class="font-semibold text-emerald-700">20 Soal Pilihan Ganda</span> dan <span class="font-semibold text-sky-700">5 Soal Uraian (Essay)</span>.</li>
+                            <li class="pl-1">Waktu pengerjaan dialokasikan selama <span class="font-semibold text-rose-600">45 Menit</span> dan berjalan otomatis.</li>
+                            <li class="pl-1">Gunakan navigasi soal untuk menandai jawaban ragu-ragu atau berpindah nomor.</li>
+                            <li class="pl-1">Tekan tombol <span class="font-semibold text-emerald-600">"Selesaikan Ujian"</span> jika sudah selesai sebelum waktu habis.</li>
+                        </ol>
+                    </div>
+                    <div class="mt-6 p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-emerald-600 text-lg"></i>
+                        <span>Sistem otomatis menyimpan jawaban Anda secara langsung di perangkat browser.</span>
+                    </div>
+                </div>
+
+                <!-- Form Identitas Siswa -->
+                <div class="lg:col-span-7 bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center text-sky-700">
+                        <i class="fa-solid fa-id-card mr-2"></i> Formulir Peserta Didik
+                    </h3>
+                    <form id="student-form" onsubmit="startAssessment(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Nama Lengkap Siswa</label>
+                            <input type="text" id="student-name" required placeholder="Contoh: Ahmad Abdullah" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm outline-none transition">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Kelas</label>
+                                <select id="student-class" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm outline-none transition bg-white">
+                                    <option value="">-- Pilih Kelas --</option>
+                                    <option value="XI IPA 1">XI IPA 1</option>
+                                    <option value="XI IPA 2">XI IPA 2</option>
+                                    <option value="XI IPA 3">XI IPA 3</option>
+                                    <option value="XII IPA 1">XII IPA 1</option>
+                                    <option value="XII IPA 2">XII IPA 2</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Nomor Absen</label>
+                                <input type="number" id="student-absent" min="1" max="50" required placeholder="Contoh: 12" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm outline-none transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Pilih Materi Asesmen</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="topic-selection" value="sel" checked class="peer hidden">
+                                    <div class="p-4 rounded-xl border-2 border-slate-200 peer-checked:border-emerald-500 peer-checked:bg-emerald-50/60 hover:border-emerald-300 transition flex items-start gap-3">
+                                        <div class="p-2.5 bg-emerald-100 text-emerald-700 rounded-lg shrink-0">
+                                            <i class="fa-solid fa-disease text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold text-sm text-slate-800">Materi A: Sel</div>
+                                            <div class="text-xs text-slate-500">Teori sel, organel, transpor membran & pembelahan.</div>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="topic-selection" value="gerak" class="peer hidden">
+                                    <div class="p-4 rounded-xl border-2 border-slate-200 peer-checked:border-sky-500 peer-checked:bg-sky-50/60 hover:border-sky-300 transition flex items-start gap-3">
+                                        <div class="p-2.5 bg-sky-100 text-sky-700 rounded-lg shrink-0">
+                                            <i class="fa-solid fa-bone text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold text-sm text-slate-800">Materi B: Sistem Gerak</div>
+                                            <div class="text-xs text-slate-500">Tulang, persendian, kerja otot & gangguan gerak.</div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-sky-600 hover:from-emerald-700 hover:to-sky-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition transform active:scale-[0.99] flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Mulai Kerjakan Asesmen Sekarang</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. QUIZ ENGINE VIEW -->
+        <section id="view-quiz" class="hidden space-y-4">
+            <!-- Top Status Bar (Timer, Info Siswa, Quick Submit) -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-wrap justify-between items-center gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2">
+                        <i class="fa-solid fa-user-graduate"></i>
+                        <span id="quiz-student-info">Nama - Kelas</span>
+                    </div>
+                    <span id="quiz-topic-badge" class="bg-sky-100 text-sky-800 px-3 py-1.5 rounded-lg text-xs font-semibold">
+                        Materi: Sel
+                    </span>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <!-- Timer -->
+                    <div class="flex items-center space-x-2 bg-rose-50 border border-rose-200 px-3.5 py-1.5 rounded-xl text-rose-700 font-mono font-bold text-sm">
+                        <i class="fa-solid fa-clock text-rose-500 animate-pulse"></i>
+                        <span id="quiz-timer">45:00</span>
+                    </div>
+                    <button onclick="confirmFinishQuiz()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs md:text-sm font-semibold transition shadow">
+                        <i class="fa-solid fa-check-double mr-1"></i> Selesai
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Layout: Questions Area + Navigation Drawer -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Left: Question Display (PG / Essay) -->
+                <div class="lg:col-span-8 space-y-4">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-5">
+                        <!-- Header Question Info -->
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                            <div class="flex items-center space-x-2">
+                                <span id="q-number-badge" class="bg-slate-800 text-white text-xs font-bold px-3 py-1 rounded-lg">Soal #1</span>
+                                <span id="q-type-badge" class="bg-emerald-100 text-emerald-800 text-xs font-medium px-2.5 py-1 rounded-lg">Pilihan Ganda</span>
+                                <span id="q-diff-badge" class="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-lg">Sedang</span>
+                            </div>
+                            <span class="text-xs text-slate-500 font-semibold" id="q-score-badge">Skor Max: 5 Poin</span>
+                        </div>
+
+                        <!-- Indikator Pembelajaran -->
+                        <div class="bg-slate-50 border-l-4 border-emerald-500 p-3 rounded-r-xl text-xs text-slate-600">
+                            <span class="font-semibold text-slate-800">Indikator:</span> <span id="q-indicator">Menganalisis organel sel</span>
+                        </div>
+
+                        <!-- Content Pertanyaan & Image/SVG -->
+                        <div class="space-y-4">
+                            <p id="q-text" class="text-slate-800 text-sm md:text-base font-medium leading-relaxed">
+                                Pertanyaan akan dimuat di sini...
+                            </p>
+                            <!-- Container Visual Gambar / Diagram SVG -->
+                            <div id="q-visual-container" class="hidden my-3 p-4 bg-slate-50 border border-slate-200 rounded-xl text-center flex justify-center items-center">
+                                <!-- SVG disuntikkan secara dinamis -->
+                            </div>
+                        </div>
+
+                        <!-- Container Opsi Jawaban PG -->
+                        <div id="q-options-container" class="space-y-2.5 pt-2">
+                            <!-- Button Pilihan A, B, C, D, E akan di-render dinamis -->
+                        </div>
+
+                        <!-- Container Essay Input -->
+                        <div id="q-essay-container" class="hidden space-y-2 pt-2">
+                            <label class="block text-xs font-semibold text-slate-600">Jawaban Uraian Anda:</label>
+                            <textarea id="q-essay-input" rows="5" placeholder="Tuliskan penjelasan atau jawaban uraian Anda secara ringkas dan padat di sini..." class="w-full p-3.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"></textarea>
+                            <p class="text-xs text-slate-400 italic">* Jawaban essay akan diperiksa dan dinilai secara rinci oleh Guru Ulpia Pelupessy, S.Pd.</p>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Navigation Buttons -->
+                    <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                        <button onclick="navigateQuiz(-1)" id="btn-prev" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs md:text-sm font-semibold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-arrow-left"></i> <span>Sebelumnya</span>
+                        </button>
+                        
+                        <label class="inline-flex items-center cursor-pointer no-print">
+                            <input type="checkbox" id="chk-doubt" onchange="toggleDoubtStatus()" class="sr-only peer">
+                            <div class="px-3.5 py-2 bg-slate-100 peer-checked:bg-amber-100 peer-checked:text-amber-800 text-slate-600 rounded-xl text-xs font-semibold transition border border-transparent peer-checked:border-amber-300 flex items-center gap-2">
+                                <i class="fa-solid fa-flag"></i> <span>Ragu-Ragu</span>
+                            </div>
+                        </label>
+
+                        <button onclick="navigateQuiz(1)" id="btn-next" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs md:text-sm font-semibold transition flex items-center gap-1.5">
+                            <span>Berikutnya</span> <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Navigation Grid Drawer -->
+                <div class="lg:col-span-4 bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+                    <h4 class="font-bold text-slate-800 text-sm flex items-center justify-between border-b pb-3">
+                        <span><i class="fa-solid fa-border-all text-emerald-600 mr-2"></i> Peta Navigasi Soal</span>
+                        <span id="quiz-progress-text" class="text-xs font-normal text-slate-500">0 / 25 Terjawab</span>
+                    </h4>
+
+                    <!-- Legend -->
+                    <div class="grid grid-cols-3 gap-1 text-[11px] text-slate-600">
+                        <div class="flex items-center space-x-1">
+                            <span class="w-3 h-3 bg-emerald-500 rounded-sm"></span>
+                            <span>Dijawab</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <span class="w-3 h-3 bg-amber-400 rounded-sm"></span>
+                            <span>Ragu-ragu</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <span class="w-3 h-3 bg-slate-200 rounded-sm"></span>
+                            <span>Belum</span>
+                        </div>
+                    </div>
+
+                    <!-- PG Grid -->
+                    <div>
+                        <div class="text-xs font-semibold text-slate-500 mb-2">Soal Pilihan Ganda (1-20)</div>
+                        <div id="grid-pg-numbers" class="grid grid-cols-5 gap-2">
+                            <!-- Buttons 1-20 -->
+                        </div>
+                    </div>
+
+                    <!-- Essay Grid -->
+                    <div class="pt-2">
+                        <div class="text-xs font-semibold text-slate-500 mb-2">Soal Uraian / Essay (21-25)</div>
+                        <div id="grid-essay-numbers" class="grid grid-cols-5 gap-2">
+                            <!-- Buttons 21-25 -->
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t">
+                        <button onclick="confirmFinishQuiz()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow">
+                            <i class="fa-solid fa-paper-plane"></i> <span>Kirim Seluruh Jawaban</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. STUDENT RESULT VIEW -->
+        <section id="view-result" class="hidden space-y-6">
+            <!-- Header Result Card -->
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 text-center relative overflow-hidden">
+                <div class="max-w-2xl mx-auto space-y-4">
+                    <span class="px-3.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold uppercase tracking-wider">
+                        Hasil Asesmen Berhasil Disimpan
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900" id="res-student-name">Nama Siswa</h2>
+                    <p class="text-slate-500 text-xs md:text-sm" id="res-student-meta">Kelas: XI IPA 1 | Materi: Sel | Tanggal: 03 Nov 2026</p>
+
+                    <!-- Score Card Grid -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-4">
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                            <div class="text-xs text-slate-500 font-semibold mb-1">Skor Pilihan Ganda</div>
+                            <div id="res-score-pg" class="text-3xl font-black text-emerald-600">0</div>
+                            <div class="text-[10px] text-slate-400 mt-1">Skala 0 - 100</div>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                            <div class="text-xs text-slate-500 font-semibold mb-1">Jawaban Benar</div>
+                            <div id="res-correct-count" class="text-3xl font-black text-sky-600">0 / 20</div>
+                            <div class="text-[10px] text-slate-400 mt-1">Nomor PG</div>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                            <div class="text-xs text-slate-500 font-semibold mb-1">Kategori Belajar</div>
+                            <div id="res-category" class="text-sm font-bold text-slate-800 mt-2">Baik</div>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                            <div class="text-xs text-slate-500 font-semibold mb-1">Status Essay</div>
+                            <div id="res-essay-status" class="text-xs font-bold text-amber-600 mt-2">Menunggu Koreksi</div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Feedback Message -->
+                    <div id="res-feedback-box" class="p-4 rounded-xl text-left text-xs md:text-sm leading-relaxed border">
+                        Umpan balik pembelajaran akan muncul di sini...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ketuntasan per Indikator -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <h3 class="text-base font-bold text-slate-800 flex items-center">
+                    <i class="fa-solid fa-chart-pie text-emerald-600 mr-2"></i> Analisis Penguasaan Indikator Pembelajaran
+                </h3>
+                <div id="res-indicator-list" class="space-y-3">
+                    <!-- Progress bar per indikator disuntikkan secara JS -->
+                </div>
+            </div>
+
+            <!-- Pembahasan Soal PG -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <h3 class="text-base font-bold text-slate-800 flex items-center justify-between">
+                    <span><i class="fa-solid fa-book-open text-sky-600 mr-2"></i> Pembahasan Kunci Jawaban Soal PG</span>
+                    <span class="text-xs font-normal text-slate-500">Evaluasi Mandiri</span>
+                </h3>
+
+                <div id="res-discussion-list" class="space-y-4 divide-y divide-slate-100">
+                    <!-- List pembahasan nomor 1-20 -->
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-center space-x-4 no-print">
+                <button onclick="window.print()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs md:text-sm font-bold transition flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i> <span>Cetak Hasil Asesmen</span>
+                </button>
+                <button onclick="switchView('landing')" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs md:text-sm font-bold transition flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i> <span>Kembali ke Halaman Utama</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 4. TEACHER DASHBOARD VIEW -->
+        <section id="view-teacher" class="hidden space-y-6">
+            <!-- Header Teacher Dashboard & Password Barrier -->
+            <div id="teacher-auth-card" class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 max-w-md mx-auto text-center space-y-4">
+                <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto text-2xl">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Akses Khusus Guru Biologi</h3>
+                    <p class="text-xs text-slate-500 mt-1">Masukkan PIN / Sandi Pengampu untuk membuka Dashboard Guru SMAS Alhilaal Tehoru.</p>
+                </div>
+                <form onsubmit="verifyTeacherAuth(event)" class="space-y-3">
+                    <input type="password" id="teacher-pin" required placeholder="Masukkan PIN Guru (Default: 1234)" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-center text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition">
+                        Buka Dashboard Guru
+                    </button>
+                </form>
+            </div>
+
+            <!-- Main Dashboard Area (Protected) -->
+            <div id="teacher-main-content" class="hidden space-y-6">
+                <!-- Top Summary Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="text-xs text-slate-500 font-semibold">Total Peserta Asesmen</div>
+                        <div id="stat-total-students" class="text-2xl md:text-3xl font-black text-slate-800 mt-1">0</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Siswa Terdaftar</div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="text-xs text-slate-500 font-semibold">Rata-Rata Nilai PG</div>
+                        <div id="stat-avg-score" class="text-2xl md:text-3xl font-black text-emerald-600 mt-1">0</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Skala 0 - 100</div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="text-xs text-slate-500 font-semibold">Ketuntasan Klasikal</div>
+                        <div id="stat-pass-rate" class="text-2xl md:text-3xl font-black text-sky-600 mt-1">0%</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Nilai &ge; 75 (KKM)</div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="text-xs text-slate-500 font-semibold">Tinggi / Terendah</div>
+                        <div class="text-xl font-bold text-slate-800 mt-1">
+                            <span id="stat-max-score" class="text-emerald-600">0</span> / <span id="stat-min-score" class="text-rose-500">0</span>
+                        </div>
+                        <div class="text-[10px] text-slate-400 mt-1">Sebaran Skor Siswa</div>
+                    </div>
+                </div>
+
+                <!-- Control Bar (Filter & Export) -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3">
+                    <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                        <input type="text" id="dash-search" oninput="renderTeacherTable()" placeholder="Cari nama siswa..." class="px-3.5 py-2 border border-slate-300 rounded-xl text-xs w-full sm:w-48 outline-none focus:ring-2 focus:ring-emerald-500">
+                        <select id="dash-filter-class" onchange="renderTeacherTable()" class="px-3.5 py-2 border border-slate-300 rounded-xl text-xs outline-none bg-white">
+                            <option value="ALL">Semua Kelas</option>
+                            <option value="XI IPA 1">XI IPA 1</option>
+                            <option value="XI IPA 2">XI IPA 2</option>
+                            <option value="XI IPA 3">XI IPA 3</option>
+                            <option value="XII IPA 1">XII IPA 1</option>
+                        </select>
+                        <select id="dash-filter-topic" onchange="renderTeacherTable()" class="px-3.5 py-2 border border-slate-300 rounded-xl text-xs outline-none bg-white">
+                            <option value="ALL">Semua Materi</option>
+                            <option value="sel">Materi Sel</option>
+                            <option value="gerak">Sistem Gerak</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
+                        <button onclick="exportToCSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow">
+                            <i class="fa-solid fa-file-excel"></i> <span>Export Excel/CSV</span>
+                        </button>
+                        <button onclick="clearAllData()" class="px-3 py-2 bg-rose-100 text-rose-700 hover:bg-rose-200 rounded-xl text-xs font-semibold transition" title="Hapus Semua Data Ujian">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Rekap Data Table -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+                        <h4 class="font-bold text-slate-800 text-sm">Rekapitulasi Hasil Asesmen Peserta Didik</h4>
+                        <span class="text-xs text-slate-400">Terhubung secara Real-time via LocalStorage</span>
+                    </div>
+
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+                                    <th class="p-3.5">No</th>
+                                    <th class="p-3.5">Nama Siswa</th>
+                                    <th class="p-3.5">Kelas</th>
+                                    <th class="p-3.5">No Absen</th>
+                                    <th class="p-3.5">Materi</th>
+                                    <th class="p-3.5">Skor PG</th>
+                                    <th class="p-3.5">Skor Essay</th>
+                                    <th class="p-3.5">Nilai Total</th>
+                                    <th class="p-3.5">Kategori</th>
+                                    <th class="p-3.5 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teacher-table-body" class="divide-y divide-slate-100 text-slate-700">
+                                <!-- Data rows injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Bank Soal Viewer Accordion -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                    <h4 class="font-bold text-slate-800 text-sm flex items-center justify-between">
+                        <span><i class="fa-solid fa-folder-tree text-emerald-600 mr-2"></i> Bank Soal & Kisi-Kisi Asesmen</span>
+                        <span class="text-xs font-normal text-slate-500">Materi Sel & Sistem Gerak Manusia</span>
+                    </h4>
+
+                    <div class="flex space-x-2 border-b border-slate-200 pb-2">
+                        <button onclick="renderBankSoal('sel')" id="tab-bank-sel" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white">Materi Sel</button>
+                        <button onclick="renderBankSoal('gerak')" id="tab-bank-gerak" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Materi Sistem Gerak</button>
+                    </div>
+
+                    <div id="bank-soal-content" class="space-y-3 text-xs max-h-96 overflow-y-auto custom-scrollbar pr-2">
+                        <!-- Content disuntikkan secara dinamis -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 mt-10 py-4 no-print">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 space-y-1">
+            <p>&copy; 2026 Asesmen Biologi Interaktif &bull; <strong>SMAS Alhilaal Tehoru</strong></p>
+            <p>Dirancang & Dikembangkan oleh <span class="font-semibold text-emerald-700">Ulpia Pelupessy, S.Pd.</span> untuk Peningkatan Mutu Pembelajaran Biologi SMA.</p>
+        </div>
+    </footer>
+
+    <!-- MODAL: PENILAIAN ESSAY GURU -->
+    <div id="modal-grading" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-xl max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-slate-800 text-sm">Penilaian Uraian / Essay Guru</h3>
+                <button onclick="closeGradingModal()" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
+            </div>
+            <div id="grading-modal-content" class="space-y-4">
+                <!-- Form input nilai essay akan di-generate dinamis -->
+            </div>
+            <div class="flex justify-end space-x-2 border-t pt-3">
+                <button onclick="closeGradingModal()" class="px-4 py-2 bg-slate-100 text-slate-600 text-xs font-bold rounded-xl">Batal</button>
+                <button onclick="saveEssayGrading()" class="px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl hover:bg-emerald-700 shadow">Simpan Nilai Essay</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PANDUAN PENGGUNAAN & DEPLOYMENT -->
+    <div id="modal-guide" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-3xl w-full p-6 space-y-4 shadow-xl max-h-[85vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-slate-800 text-base flex items-center">
+                    <i class="fa-solid fa-circle-question text-amber-500 mr-2"></i> Panduan Website & Publikasi Online
+                </h3>
+                <button onclick="closeGuideModal()" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
+            </div>
+
+            <div class="space-y-4 text-xs md:text-sm text-slate-600 leading-relaxed">
+                <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
+                    <h4 class="font-bold text-emerald-900 text-xs uppercase mb-1">Cara Menggunakan Website:</h4>
+                    <p>1. <strong>Mode Siswa:</strong> Siswa memilih materi, mengerjakan 20 PG & 5 Uraian. Setelah selesai, skor PG dihitung otomatis dan tersimpan.</p>
+                    <p>2. <strong>Dashboard Guru:</strong> Akses via menu atas dengan PIN default: <code class="bg-white px-1.5 py-0.5 rounded border border-emerald-300 font-bold text-emerald-800">1234</code>. Guru dapat menilai essay, memfilter kelas, dan mengekspor nilai ke file Excel/CSV.</p>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-slate-800">Cara Mempublikasikan Website agar Online Gratis:</h4>
+                    <ol class="list-decimal list-inside space-y-1.5 pl-1">
+                        <li><strong>Opsi 1 (Netlify Drop - Paling Mudah):</strong> Simpan kode ini sebagai <code class="bg-slate-100 px-1 font-mono">index.html</code>. Buka <a href="https://app.netlify.com/drop" target="_blank" class="text-sky-600 underline font-semibold">app.netlify.com/drop</a>, drag-and-drop file tersebut. Website langsung aktif online dalam 10 detik!</li>
+                        <li><strong>Opsi 2 (Vercel):</strong> Upload file ke akun GitHub Anda, lalu hubungkan ke Vercel untuk deployment otomatis.</li>
+                        <li><strong>Opsi 3 (GitHub Pages):</strong> Buat repositori publik di GitHub, upload <code class="bg-slate-100 px-1 font-mono">index.html</code>, lalu aktifkan GitHub Pages pada menu Settings &gt; Pages.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="flex justify-end border-t pt-3">
+                <button onclick="closeGuideModal()" class="px-5 py-2 bg-slate-800 text-white text-xs font-bold rounded-xl">Mengerti & Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT CODE INTEGRATION -->
+    <script>
+        /* ==========================================================================
+           1. DATA BANK SOAL LENGKAP (MATERI SEL & SISTEM GERAK MANUSIA)
+           ========================================================================== */
+        const QUESTION_BANK = {
+            sel: {
+                title: "Materi A: Sel",
+                pg: [
+                    {
+                        id: 1,
+                        indicator: "Menjelaskan konsep dasar teori sel modern.",
+                        question: "Tokoh Biologi yang menyatakan bahwa sel merupakan unit struktural dan fungsional terkecil dari makhluk hidup, serta seluruh sel berasal dari sel sebelumnya (omnis cellula e cellula) adalah...",
+                        options: ["Robert Hooke", "Rudolf Virchow", "Antonie van Leeuwenhoek", "Theodor Schwann", "Felix Dujardin"],
+                        key: 1, // B
+                        discussion: "Rudolf Virchow (1858) mengemukakan premis 'omnis cellula e cellula' yang menegaskan bahwa setiap sel baru berasal dari pembelahan sel sebelumnya.",
+                        difficulty: "Mudah",
+                        svg: `<svg class="w-32 h-32 mx-auto" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#d1fae5" stroke="#10b981" stroke-width="4"/><circle cx="50" cy="50" r="15" fill="#047857"/><text x="50" y="55" font-size="8" text-anchor="middle" fill="#white">Sel Utama</text></svg>`
+                    },
+                    {
+                        id: 2,
+                        indicator: "Menganalisis fungsi organel sel hewan.",
+                        question: "Organel sel berbentuk silindris yang tersusun atas mikrotubulus dan berperan penting dalam pembentukan benang spindel saat pembelahan sel hewan adalah...",
+                        options: ["Lisosom", "Sentrosom / Sentriol", "Ribosom", "Badan Golgi", "Peroksisom"],
+                        key: 1, // B
+                        discussion: "Sentriol/Sentrosom berfungsi mengorganisasikan mikrotubulus dan membentuk benang spindel untuk menarik kromosom saat pembelahan sel.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 3,
+                        indicator: "Mengidentifikasi organel penghasil energi (ATP).",
+                        question: "Perhatikan gambar organel sel di bawah ini! Organel dengan membran ganda yang memiliki lipatan krista berfungsi untuk...",
+                        options: ["Sintesis protein", "Pencernaan intraseluler", "Respirasi seluler dan pembentukan ATP", "Sekresi zat dan pelepasan vesikel", "Detoksifikasi racun"],
+                        key: 2, // C
+                        discussion: "Organel tersebut adalah Mitokondria. Krista memperluas permukaan membran dalam tempat berlangsungnya rantai transpor elektron respirasi sel untuk memproduksi ATP.",
+                        difficulty: "Sedang",
+                        svg: `<svg class="w-48 h-24 mx-auto" viewBox="0 0 200 100"><rect x="20" y="20" width="160" height="60" rx="30" fill="#fef3c7" stroke="#d97706" stroke-width="3"/><path d="M 40 50 Q 60 30 70 50 T 100 50 T 130 50 T 160 50" fill="none" stroke="#b45309" stroke-width="3"/><text x="100" y="85" font-size="10" text-anchor="middle" fill="#78350f">Diagram Mitokondria</text></svg>`
+                    },
+                    {
+                        id: 4,
+                        indicator: "Membedakan organel sel tumbuhan dan sel hewan.",
+                        question: "Manakah pasangan organel berikut yang HANYA ditemukan pada sel tumbuhan dan TIDAK terdapat pada sel hewan?",
+                        options: ["Dinding sel dan Plastida (Kloroplas)", "Mitokondria dan Ribosom", "Lisosom dan Sentriol", "Membran sel dan Vakuola kecil", "Retikulum Endoplasma dan Peroksisom"],
+                        key: 0, // A
+                        discussion: "Sel tumbuhan memiliki Dinding Sel (tersusun atas selulosa) dan Plastida/Kloroplas (fotosintesis), yang tidak dimiliki sel hewan.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 5,
+                        indicator: "Menganalisis mekanisme transpor pasif membran.",
+                        question: "Peristiwa perpindahan molekul air atau pelarut dari larutan hipotonis (konsentrasi zat terlarut rendah) menuju hipertonis melewati membran semipermeabel disebut...",
+                        options: ["Difusi terfasilitasi", "Osmosis", "Endositosis", "Pompa Natrium-Kalium", "Eksositosis"],
+                        key: 1, // B
+                        discussion: "Osmosis adalah difusi air melewati membran semipermeabel dari area berpotensial air tinggi (hipotonis) ke potensial air rendah (hipertonis).",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 6,
+                        indicator: "Menganalisis efek larutan terhadap sel darah merah.",
+                        question: "Jika sel darah merah (eritrosit) dimasukkan ke dalam akuades (larutan akuatik murni/hipotonis), maka peristiwa yang akan terjadi adalah...",
+                        options: ["Krenasi (kerutan sel)", "Plasmolisis", "Hemolisis (sel pecah)", "Turgiditas optimal", "Tidak mengalami perubahan"],
+                        key: 2, // C
+                        discussion: "Air akan masuk secara cepat ke dalam eritrosit melalui osmosis karena sel hipertonis dibanding akuades, menyebabkan sel membengkak dan pecah (Hemolisis).",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 7,
+                        indicator: "Mengidentifikasi fungsi Retikulum Endoplasma Kasar.",
+                        question: "Retikulum Endoplasma (RE) Kasar tampak berbintik-bintik di bawah mikroskop elektron karena ditempeli oleh organel...",
+                        options: ["Lisosom", "Ribosom", "Peroksisom", "Vakuola", "Sentrosom"],
+                        key: 1, // B
+                        discussion: "RE Kasar ditempeli oleh Ribosom di permukaannya, tempat di mana sintesis protein sekretori berlangsung.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 8,
+                        indicator: "Menganalisis peran Badan Golgi.",
+                        question: "Organel yang berperan menampung, memodifikasi, mengemas, dan menyalurkan makromolekul seperti protein sebelum disekresikan keluar sel adalah...",
+                        options: ["Badan Golgi (Diktiosom)", "Nukleolus", "Kloroplas", "Mikrotubulus", "RE Halus"],
+                        key: 0, // A
+                        discussion: "Badan Golgi bertindak sebagai 'pusat pengemasan dan sekresi' protein serta karbohidrat di dalam sel.",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 9,
+                        indicator: "Menjelaskan mekanisme transpor aktif.",
+                        question: "Transpor membran yang melawan gradien konsentrasi dan memerlukan energi berupa ATP adalah...",
+                        options: ["Difusi Sederhana", "Osmosis Terbantu", "Pompa Ion Na+/K+", "Dialisis", "Filtrasi"],
+                        key: 2, // C
+                        discussion: "Pompa ion Na+/K+ adalah contoh transpor aktif yang memindahkan ion melawan gradien konsentrasi menggunakan energi ATP.",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 10,
+                        indicator: "Menganalisis struktur membran plasma (Fluid Mosaic Model).",
+                        question: "Berdasarkan model mozaik cair Singer-Nicolson, komponen membran sel yang bersifat hidrofobik (menolak air) berada pada bagian...",
+                        options: ["Kepala fosfat", "Ekor asam lemak (lipid)", "Protein perifer", "Glikoprotein", "Glikolipid luar"],
+                        key: 1, // B
+                        discussion: "Ekor asam lemak dari lapisan fosfolipid ganda bersifat nonpolar dan hidrofobik, menghadap ke dalam interior membran.",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 11,
+                        indicator: "Memahami fungsi Lisosom.",
+                        question: "Proses pencernaan organel sel yang rusak atau tidak berfungsi kembali oleh enzim hidrolitik di dalam sel disebut...",
+                        options: ["Autolisis", "Autofagi", "Eksositosis", "Pinositosis", "Fagositosis"],
+                        key: 1, // B
+                        discussion: "Autofagi adalah pendaurulangan komponen organel sel yang telah rusak oleh bantuan enzim hidrolitik lisosom.",
+                        difficulty: "Sukar",
+                        svg: null
+                    },
+                    {
+                        id: 12,
+                        indicator: "Menganalisis tahap pembelahan mitosis.",
+                        question: "Tahapan mitosis di mana kromosom terikat pada benang spindel dan berjejer rapi di bidang ekuator (tengah) sel adalah...",
+                        options: ["Profase", "Metafase", "Anafase", "Telofase", "Interfase"],
+                        key: 1, // B
+                        discussion: "Metafase ditandai dengan sejajarnya kromatid saudara pada garis tengah/ekuator sel sebelum dipisahkan.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 13,
+                        indicator: "Menganalisis perbedaan Mitosis dan Meiosis.",
+                        question: "Pernyataan yang tepat mengenai perbedaan antara pembelahan mitosis dan meiosis adalah...",
+                        options: [
+                            "Mitosis menghasilkan 4 sel anak haploid, meiosis menghasilkan 2 sel anak diploid.",
+                            "Mitosis terjadi pada sel somatic (tubuh), meiosis terjadi pada sel gamet (kelamin).",
+                            "Mitosis mengalami pindah silang (crossing over), meiosis tidak mengalami.",
+                            "Mitosis bertujuan mengurangi jumlah kromosom menjadi separuh.",
+                            "Meiosis menghasilkan sel anak yang identik secara genetik dengan induknya."
+                        ],
+                        key: 1, // B
+                        discussion: "Mitosis terjadi pada sel somatis untuk pertumbuhan/perbaikan jaringan, sedangkan meiosis terjadi pada organ reproduksi untuk pembentukan gamet.",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 14,
+                        indicator: "Mengidentifikasi bagian inti sel (Nukleus).",
+                        question: "Sub-struktur di dalam nukleus yang bertanggung jawab untuk mensintesis RNA ribosomal (rRNA) dan merakit unit ribosom adalah...",
+                        options: ["Nukleolus (Anak Inti)", "Kromatin", "Nukleoplasma", "Karyoteka", "Pori Nukleus"],
+                        key: 0, // A
+                        discussion: "Nukleolus adalah wilayah padat di dalam inti tempat transkripsi rRNA dan perakitan awal subunit ribosom.",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 15,
+                        indicator: "Menganalisis transpor endositosis.",
+                        question: "Proses penelanan molekul zat padat atau bakteri oleh sel fagosit (seperti sel darah putih Leukosit) dinamakan...",
+                        options: ["Pinositosis", "Fagositosis", "Eksositosis", "Osmosis", "Difusi terbantu"],
+                        key: 1, // B
+                        discussion: "Fagositosis ('sel makan') adalah mekanisme endositosis untuk menelan partikel padat berukuran besar.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 16,
+                        indicator: "Menjelaskan fungsi Peroksisom.",
+                        question: "Peroksisom mengandung enzim katalase yang sangat penting untuk...",
+                        options: ["Mengubah zat tepung menjadi glukosa", "Menguraikan racun Hidrogen Peroksida (H2O2) menjadi H2O dan O2", "Membentuk dinding sel baru", "Menghasilkan pigmen klorofil", "Memecah protein menjadi asam amino"],
+                        key: 1, // B
+                        discussion: "Enzim katalase dalam peroksisom menetralkan senyawa beracun H2O2 hasil metabolisme menjadi air (H2O) dan oksigen (O2).",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 17,
+                        indicator: "Mengidentifikasi fungsi Sitoskeleton.",
+                        question: "Elemen sitoskeleton terkecil yang tersusun atas monomer protein aktin dan berperan dalam gerakan amoeboid serta pembentukan alur pembelahan sel adalah...",
+                        options: ["Mikrotubulus", "Filamen Intermediet", "Mikrofilamen", "Sentriol", "Silia"],
+                        key: 2, // C
+                        discussion: "Mikrofilamen (filamen aktin) berperan penting dalam struktur penopang tepi sel, kontraksi selular, dan alur sitokinesis.",
+                        difficulty: "Sukar",
+                        svg: null
+                    },
+                    {
+                        id: 18,
+                        indicator: "Menganalisis pembelahan sel tahap Anafase.",
+                        question: "Ciri khas utama yang dapat diamati pada sel yang sedang berada dalam tahap Anafase pembelahan mitosis adalah...",
+                        options: ["Membran inti mulai terbentuk kembali", "Kromatin menebal menjadi kromosom", "Kromatid saudara berpisah dan bergerak menuju kutub berlawanan", "Kromosom berderet di bidang ekuator", "Terjadi sintesis DNA (fase S)"],
+                        key: 2, // C
+                        discussion: "Pada Anafase, sentromer membelah dan kromatid saudara ditarik oleh benang spindel menuju kutub sel yang berlawanan.",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 19,
+                        indicator: "Menjelaskan fungsi Plastida.",
+                        question: "Plastida yang tidak berwarna dan berfungsi sebagai tempat penyimpanan cadangan makanan berupa amilum/pati pada sel tumbuhan dinamakan...",
+                        options: ["Kloroplas", "Kromoplas", "Leukoplas (Amiloplas)", "Etioplas", "Phaeoplas"],
+                        key: 2, // C
+                        discussion: "Leukoplas (khususnya Amiloplas) adalah jenis plastida tak berwarna yang menyimpan amilum pada umbi atau biji tumbuhan.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 20,
+                        indicator: "Menganalisis perbedaan sel Prokariotik dan Eukariotik.",
+                        question: "Perbedaan mendasar antara sel prokariotik (bakteri) dan sel eukariotik (tumbuhan/hewan) terletak pada...",
+                        options: ["Ada tidaknya asam nukleat (DNA)", "Ada tidaknya membran inti sel (karioteka)", "Ada tidaknya sitoplasma", "Ada tidaknya ribosom", "Ada tidaknya membran sel"],
+                        key: 1, // B
+                        discussion: "Sel Prokariotik tidak memiliki membran inti (nukleus sejati), sehingga materi genetik (DNA) berada langsung di daerah nukleoid.",
+                        difficulty: "Mudah",
+                        svg: null
+                    }
+                ],
+                essay: [
+                    {
+                        id: 21,
+                        indicator: "Menganalisis dampak lingkungan terhadap struktur sel.",
+                        question: "Jelaskan apa yang terjadi jika sel tumbuhan berada di dalam lingkungan larutan hipertonis! Sertakan istilah ilmiah yang terjadi pada sel tersebut.",
+                        guide: "Siswa harus menyebutkan istilah 'Plasmolisis'. Penjelasan: Air keluar dari sel via osmosis, sitoplasma menyusut dan membran sel terlepas dari dinding sel."
+                    },
+                    {
+                        id: 22,
+                        indicator: "Bandingkan struktur sel hewan dan tumbuhan.",
+                        question: "Tuliskan 3 (tiga) perbedaan utama antara sel hewan dan sel tumbuhan dalam bentuk tabel/penjelasan komparatif!",
+                        guide: "Perbedaan meliputi: Dinding sel (Ada/Tidak), Plastida/Kloroplas (Ada/Tidak), Sentriol (Tidak ada pada tumbuhan tingkat tinggi/Ada), Vakuola (Besar/Kecil atau tidak ada)."
+                    },
+                    {
+                        id: 23,
+                        indicator: "Menganalisis keterkaitan fungsi organel sel.",
+                        question: "Jelaskan hubungan kerja sama antara Nukleus, Retikulum Endoplasma Kasar, dan Badan Golgi dalam proses sintesis dan sekresi protein keluar sel!",
+                        guide: "Nukleus mengirim arahan mRNA -> RE Kasar (ribosom) mensintesis protein -> Protein diangkut vesikel ke Badan Golgi untuk dimodifikasi & dikemas -> Sekresi via eksositosis."
+                    },
+                    {
+                        id: 24,
+                        indicator: "Membedakan mekanisme transpor aktif dan pasif.",
+                        question: "Jelaskan 2 perbedaan mendasar antara Transpor Pasif dan Transpor Aktif melewati membran sel beserta masing-masing contohnya!",
+                        guide: "Pasif: Searah gradien konsentrasi, tanpa ATP (Contoh: Difusi/Osmosis). Aktif: Melawan gradien konsentrasi, butuh ATP (Contoh: Pompa Na+/K+, Eksositosis)."
+                    },
+                    {
+                        id: 25,
+                        indicator: "Menganalisis siklus sel dan pembelahan meiosis.",
+                        question: "Mengapa pembelahan Meiosis sangat penting dalam proses pembentukan sel kelamin (gametogenesis) pada makhluk hidup yang berkembang biak secara seksual?",
+                        guide: "Meiosis mereduksi jumlah kromosom dari 2n (diploid) menjadi n (haploid), sehingga saat fertilisasi jumlah kromosom keturunan tetap stabil (2n) dan menciptakan variasi genetik via crossing over."
+                    }
+                ]
+            },
+            gerak: {
+                title: "Materi B: Sistem Gerak Manusia",
+                pg: [
+                    {
+                        id: 1,
+                        indicator: "Mengidentifikasi jenis-jenis tulang penyusun rangka.",
+                        question: "Tulang-tulang berikut yang tergolong ke dalam kelompok tulang pipih pada rangka manusia adalah...",
+                        options: ["Tulang paha dan tulang lengan atas", "Tulang tengkorak, tulang dada, dan tulang rusuk", "Tulang pergelangan tangan dan kaki", "Tulang belakang dan tulang rahang bawah", "Tulang betis dan tulang kering"],
+                        key: 1, // B
+                        discussion: "Tulang pipih berfungsi melindungi organ vital. Contohnya tulang tengkorak, tulang dada (sternum), dan tulang rusuk (costae).",
+                        difficulty: "Mudah",
+                        svg: `<svg class="w-32 h-32 mx-auto" viewBox="0 0 100 100"><rect x="25" y="10" width="50" height="80" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="3"/><line x1="30" y1="30" x2="70" y2="30" stroke="#0369a1" stroke-width="2"/><line x1="30" y1="50" x2="70" y2="50" stroke="#0369a1" stroke-width="2"/><text x="50" y="75" font-size="8" text-anchor="middle" fill="#0369a1">Rangka Dada</text></svg>`
+                    },
+                    {
+                        id: 2,
+                        indicator: "Menganalisis tipe persendian bergerak bebas (Diartrosis).",
+                        question: "Sendi yang memungkinkan terjadinya gerakan ke segala arah, seperti hubungan antara tulang lengan atas dengan gelang bahu adalah sendi...",
+                        options: ["Sendi Engsel", "Sendi Peluru", "Sendi Putar", "Sendi Pelana", "Sendi Geser"],
+                        key: 1, // B
+                        discussion: "Sendi Peluru (ball-and-socket joint) memungkinkan rotasi bebas ke segala arah.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 3,
+                        indicator: "Memahami struktur mikroskopis otot lurik.",
+                        question: "Unit fungsional terkecil dari serabut otot yang dibatasi oleh dua garis Z dan memuat filamen aktin serta miosin dinamakan...",
+                        options: ["Sarkomer", "Sarkolema", "Sarkoplasma", "Fasikulus", "Miofibril"],
+                        key: 0, // A
+                        discussion: "Sarkomer adalah unit kontraktil otot rangka yang membentang dari satu garis Z ke garis Z berikutnya.",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 4,
+                        indicator: "Menganalisis mekanisme kerja otot pasca pemendekan.",
+                        question: "Ion yang dirilis dari retikulum sarkoplasma untuk mengikat troponin sehingga menyingkap situs aktif aktin saat kontraksi otot adalah...",
+                        options: ["Ion Natrium (Na+)", "Ion Kalium (K+)", "Ion Kalsium (Ca2+)", "Ion Klorida (Cl-)", "Ion Magnesium (Mg2+)"],
+                        key: 2, // C
+                        discussion: "Ion Kalsium (Ca2+) mengikat troponin, mengubah konformasinya sehingga miosin dapat menempel pada aktin.",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 5,
+                        indicator: "Mengidentifikasi sifat kerja pasangan otot.",
+                        question: "Gerakan meluruskan lengan (ekstensi) melibatkan kerja pasangan otot biceps dan triceps secara...",
+                        options: ["Sinergis (Biceps kontraksi, Triceps kontraksi)", "Antagonis (Biceps relaksasi, Triceps kontraksi)", "Antagonis (Biceps kontraksi, Triceps relaksasi)", "Sinergis (Otot polos bekerja)", "Involunter"],
+                        key: 1, // B
+                        discussion: "Ekstensi (meluruskan siku) terjadi saat Biceps relaksasi dan Triceps berkontraksi secara antagonis.",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 6,
+                        indicator: "Menganalisis kelainan/gangguan tulang.",
+                        question: "Kelainan tulang belakang yang melengkung berlebihan ke arah samping kanan atau kiri sehingga membentuk huruf 'S' disebut...",
+                        options: ["Lordosis", "Kifosis", "Skoliosis", "Osteoporosis", "Riketsia"],
+                        key: 2, // C
+                        discussion: "Skoliosis adalah bengkoknya tulang belakang ke samping (lateral).",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 7,
+                        indicator: "Membedakan jenis jaringan otot manusia.",
+                        question: "Ciri-ciri otot: berbentuk gelendong dengan ujung meruncing, memiliki 1 inti di tengah, bekerja secara tidak sadar (involunter), dan tidak cepat lelah. Jenis otot ini adalah...",
+                        options: ["Otot Lurik / Rangka", "Otot Polos", "Otot Jantung", "Otot Kardiak Lurik", "Tendon"],
+                        key: 1, // B
+                        discussion: "Otot Polos melapisi organ dalam (seperti usus dan pembuluh darah), berbentuk gelendong dengan inti tunggal di tengah.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 8,
+                        indicator: "Mengidentifikasi Sendi Pelana.",
+                        question: "Sendi yang memungkinkan gerakan dua arah (seperti ibu jari tangan menempel pada telapak tangan) tergolong ke dalam...",
+                        options: ["Sendi Engsel", "Sendi Pelana (Saddle joint)", "Sendi Ellipsoid", "Sendi Luncur", "Sendi Mati"],
+                        key: 1, // B
+                        discussion: "Sendi Pelana terdapat pada ibu jari dengan tulang metakarpal, memungkinkan gerakan dua arah.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 9,
+                        indicator: "Menganalisis kelainan Osteoporosis.",
+                        question: "Osteoporosis ditandai dengan penurunan kepadatan tulang yang menyebabkan tulang rapuh. Kelainan ini umumnya disebabkan oleh...",
+                        options: ["Kekurangan asupan Protein", "Kekurangan hormon Estrogen/Kalsium dan penuaan", "Infeksi bakteri Treponema", "Kelebihan vitamin D", "Kerusakan matriks rawan hialin"],
+                        key: 1, // B
+                        discussion: "Penurunan estrogen (pada menopause) dan kekurangan Kalsium mengganggu resorpsi tulang, memicu osteoporosis.",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 10,
+                        indicator: "Mengidentifikasi bagian persendian.",
+                        question: "Cairan pelumas yang mengurangi gesekan antar ujung tulang pada rongga sendi diartrosis dinamakan...",
+                        options: ["Cairan Limfa", "Cairan Sinovial", "Plasma Darah", "Matriks Kondrin", "Osteosit"],
+                        key: 1, // B
+                        discussion: "Cairan Sinovial diproduksi oleh membran sinovial untuk meminyaki permukaan tulang di dalam kapsul sendi.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 11,
+                        indicator: "Memahami hubungan tulang rawan dan tulang sejati.",
+                        question: "Proses pembentukan tulang dari jaringan tulang rawan (kartilago) menjadi tulang keras (osteon) disebut...",
+                        options: ["Ossifikasi", "Kalsifikasi", "Resorpsi", "Artikulasi", "Ekskavasi"],
+                        key: 0, // A
+                        discussion: "Ossifikasi adalah proses pengerasan dan penggantian tulang rawan embrio menjadi matriks tulang keras.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 12,
+                        indicator: "Menganalisis gerak otot Abduksi dan Adduksi.",
+                        question: "Gerakan merentangkan tangan menjauhi sumbu tengah tubuh dinamakan gerak..., sedangkan mengembalikan tangan mendekati tubuh dinamakan gerak...",
+                        options: ["Elevasi dan Depresi", "Abduksi dan Adduksi", "Pronasi dan Supinasi", "Fleksi dan Ekstensi", "Inversi dan Eversi"],
+                        key: 1, // B
+                        discussion: "Abduksi = menjauhi badan (ab- = menjauh). Adduksi = mendekati badan (add- = menambah/mendekat).",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 13,
+                        indicator: "Menganalisis gangguan Fraktura.",
+                        question: "Jika seseorang mengalami kecelakaan dan tulang pahanya patah hingga merobek kulit dan keluar, maka jenis patah tulang tersebut adalah...",
+                        options: ["Fraktura Tertutup", "Fraktura Terbuka", "Greenstick", "Fisura (retak)", "Kram otot"],
+                        key: 1, // B
+                        discussion: "Fraktura terbuka ditandai dengan ditembusnya kulit oleh fragmen tulang yang patah.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 14,
+                        indicator: "Menganalisis metabolisme energi otot anaerob.",
+                        question: "Rasa pegal dan lelah pada otot setelah melakukan aktivitas olahraga berat yang sangat cepat disebabkan oleh penumpukan...",
+                        options: ["Asam Urat", "Asam Laktat", "Asam Piruvat", "Asetil Ko-A", "Kreatin Fosfat"],
+                        key: 1, // B
+                        discussion: "Saat pasokan O2 terbatas, fermentasi anaerobik memecah glukosa menjadi Asam Laktat yang tertimbun di otot.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 15,
+                        indicator: "Mengidentifikasi Sendi Engsel.",
+                        question: "Sendi yang hanya memungkinkan gerakan satu arah (seperti pada siku dan lutut) adalah...",
+                        options: ["Sendi Engsel (Hinge joint)", "Sendi Putar", "Sendi Pelana", "Sendi Mati (Sintartrosis)", "Sendi Peluru"],
+                        key: 0, // A
+                        discussion: "Sendi Engsel membatasi rotasi sehingga hanya bisa bergerak membuka-menutup 1 arah (fleksi-ekstensi).",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 16,
+                        indicator: "Mengidentifikasi bagian penyambung otot dan tulang.",
+                        question: "Jaringan ikat padat dan kuat yang menghubungkan otot rangka langsung ke bagian tulang adalah...",
+                        options: ["Ligamen", "Tendon", "Bursa", "Kartilago hialin", "Sarkolema"],
+                        key: 1, // B
+                        discussion: "Tendon menghubungkan Otot dengan Tulang, sedangkan Ligamen menghubungkan Tulang dengan Tulang.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 17,
+                        indicator: "Menganalisis gangguan Miastenia Gravis.",
+                        question: "Penyakit autoimun di mana sistem imun menyerang reseptor asetilkolin pada membran sel otot sehingga otot mengalami kelemahan progresif disebut...",
+                        options: ["Tetanus", "Atrofi Otot", "Miastenia Gravis", "Hipertrofi", "Distrofi Otot"],
+                        key: 2, // C
+                        discussion: "Miastenia gravis mengganggu transmisi sinyal di neuromuscular junction akibat antibodi menyerang reseptor asetilkolin.",
+                        difficulty: "Sukar",
+                        svg: null
+                    },
+                    {
+                        id: 18,
+                        indicator: "Menjelaskan jumlah rusuk manusia.",
+                        question: "Jumlah pasangan tulang rusuk sejati (costae verae) yang melekat langsung pada tulang dada adalah...",
+                        options: ["7 Pasang", "3 Pasang", "2 Pasang", "12 Pasang", "5 Pasang"],
+                        key: 0, // A
+                        discussion: "Manusia memiliki 7 pasang tulang rusuk sejati, 3 pasang rusuk palsu, dan 2 pasang rusuk melayang.",
+                        difficulty: "Sedang",
+                        svg: null
+                    },
+                    {
+                        id: 19,
+                        indicator: "Menganalisis gerak Telapak Tangan.",
+                        question: "Gerakan memutar telapak tangan menengadah disebut ..., sedangkan gerakan menungkupkan telapak tangan disebut...",
+                        options: ["Supinasi dan Pronasi", "Inversi dan Eversi", "Fleksi dan Ekstensi", "Elevasi dan Depresi", "Abduksi dan Adduksi"],
+                        key: 0, // A
+                        discussion: "Supinasi = menengadah (seperti memegang mangkuk sup). Pronasi = menungkup.",
+                        difficulty: "Mudah",
+                        svg: null
+                    },
+                    {
+                        id: 20,
+                        indicator: "Menganalisis kelainan Atrofi Otot.",
+                        question: "Pengecilan ukuran dan penurunan fungsi massa otot akibat lama tidak digunakan (misalnya lumpuh atau bedridden) dinamakan...",
+                        options: ["Hipertrofi", "Atrofi", "Stiff / Kaku leher", "Tetanus", "Kram otot"],
+                        key: 1, // B
+                        discussion: "Atrofi otot adalah penurunan massa sel otot karena kurang aktivitas fisik, denervasi, atau malnutrisi.",
+                        difficulty: "Mudah",
+                        svg: null
+                    }
+                ],
+                essay: [
+                    {
+                        id: 21,
+                        indicator: "Menganalisis mekanisme kontraksi otot berdasarkan Teori Pergeseran Filamen.",
+                        question: "Jelaskan secara berurutan mekanisme kontraksi otot menurut Teori Sliding Filament dari pelepasan impuls hingga pemendekan sarkomer!",
+                        guide: "Sinyal saraf -> Lepas Ca2+ dari Retikulum Sarkoplasma -> Ca2+ ikat troponin -> Situs aktin terbuka -> Kepala miosin mengikat aktin (Cross-bridge) -> Miosin menarik aktin menggunakan energi ATP."
+                    },
+                    {
+                        id: 22,
+                        indicator: "Membedakan 3 Jenis Otot Manusia.",
+                        question: "Tuliskan perbedaan Otot Polos, Otot Lurik, dan Otot Jantung berdasarkan: (a) Bentuk sel, (b) Jumlah & letak inti, serta (c) Cara kerja!",
+                        guide: "Polos: Gelendong, 1 di tengah, Involunter. Lurik: Silindris panjang bergaris, banyak di tepi, Volunter. Jantung: Silindris bercabang, 1-2 di tengah, Involunter."
+                    },
+                    {
+                        id: 23,
+                        indicator: "Menganalisis kelainan kelengkungan tulang belakang.",
+                        question: "Jelaskan perbedaan antara gangguan tulang Kifosis, Lordosis, dan Skoliosis beserta penyebab kebiasaan posisi tubuh yang memicu kelainan tersebut!",
+                        guide: "Kifosis (Bungkuk ke belakang), Lordosis (Melengkung ke depan berlebihan di pinggang), Skoliosis (Bengkok ke samping). Disebabkan posisi duduk yang salah terus menerus."
+                    },
+                    {
+                        id: 24,
+                        indicator: "Menganalisis perbedaan ligamen dan tendon.",
+                        question: "Mengapa cedera pada Ligamen (Sprain) umumnya membutuhkan waktu pemulihan yang jauh lebih lama dibandingkan cedera jaringan lunak biasa? Jelaskan dari struktur pembuluh darahnya!",
+                        guide: "Ligamen adalah jaringan ikat padat dengan pasokan pembuluh darah (vaskularisasi) yang sangat minimal, sehingga suplai nutrisi untuk regenerasi sel lambat."
+                    },
+                    {
+                        id: 25,
+                        indicator: "Menganalisis fungsi rangka manusia.",
+                        question: "Sebutkan 4 fungsi utama sistem rangka (tulang) bagi tubuh manusia selain sebagai alat gerak pasif!",
+                        guide: "1. Penopang/Pemberi bentuk tubuh. 2. Pelindung organ dalam vital. 3. Tempat pembentukan sel darah (hematopoiesis). 4. Tempat penyimpanan kalsium & fosfat."
+                    }
+                ]
+            }
+        };
+
+        /* ==========================================================================
+           2. SAMPLE DATA AWAL UNTUK DEMO DASHBOARD GURU
+           ========================================================================== */
+        const INITIAL_SAMPLE_RECORDS = [
+            {
+                id: "REC-1001",
+                studentName: "Siti Rahma Pelupessy",
+                studentClass: "XI IPA 1",
+                absentNo: "03",
+                topicKey: "sel",
+                timestamp: "2026-11-03 08:30",
+                scorePG: 90,
+                correctCount: 18,
+                totalPG: 20,
+                essayStatus: "Sudah Dinilai",
+                essayScoreTotal: 22, // Skala 0-25
+                totalScore: 94, // 90*0.7 + (22/25*100)*0.3 = 63 + 26.4 = 89.4 => 94
+                category: "Sangat Baik",
+                answersPG: {1:1, 2:1, 3:2, 4:0, 5:1, 6:2, 7:1, 8:0, 9:2, 10:1, 11:1, 12:1, 13:1, 14:0, 15:1, 16:1, 17:2, 18:2, 19:2, 20:1},
+                answersEssay: {21: "Plasmolisis. Air keluar dari vakuola sel.", 22: "Sel tumbuhan punya dinding sel dan kloroplas.", 23: "Nukleus cetak mRNA lalu RE buat protein.", 24: "Pasif tanpa ATP, aktif butuh ATP.", 25: "Menjaga jumlah kromosom tetap diploid."}
+            },
+            {
+                id: "REC-1002",
+                studentName: "Muhammad Lestaluhu",
+                studentClass: "XI IPA 2",
+                absentNo: "14",
+                topicKey: "gerak",
+                timestamp: "2026-11-03 09:15",
+                scorePG: 75,
+                correctCount: 15,
+                totalPG: 20,
+                essayStatus: "Belum Dinilai",
+                essayScoreTotal: 0,
+                totalScore: 75,
+                category: "Baik",
+                answersPG: {1:1, 2:1, 3:0, 4:2, 5:1, 6:2, 7:1, 8:1, 9:1, 10:1, 11:0, 12:1, 13:1, 14:1, 15:0, 16:1, 17:0, 18:0, 19:0, 20:1},
+                answersEssay: {21: "Miosin menarik aktin dengan ATP.", 22: "Otot polos involunter, lurik volunter.", 23: "Skoliosis bengkok samping.", 24: "Ligamen minim pembuluh darah.", 25: "Melindungi organ dalam."}
+            }
+        ];
+
+        /* ==========================================================================
+           3. APP STATE MANAGEMENT
+           ========================================================================== */
+        let state = {
+            currentView: 'landing',
+            currentStudent: null,
+            currentTopicKey: 'sel',
+            currentQuestionIdx: 0,
+            answersPG: {},       // { questionId: selectedOptionIdx }
+            answersEssay: {},    // { questionId: textString }
+            doubtStatus: {},     // { questionId: boolean }
+            timerSeconds: 45 * 60,
+            timerInterval: null,
+            examFinished: false,
+            gradingTargetRecordId: null
+        };
+
+        // Initialize LocalStorage if empty
+        if (!localStorage.getItem('biology_assessment_records')) {
+            localStorage.setItem('biology_assessment_records', JSON.stringify(INITIAL_SAMPLE_RECORDS));
+        }
+
+        /* ==========================================================================
+           4. VIEW SWITCHING & AUTH
+           ========================================================================== */
+        function switchView(viewName) {
+            state.currentView = viewName;
+
+            document.getElementById('view-landing').classList.add('hidden');
+            document.getElementById('view-quiz').classList.add('hidden');
+            document.getElementById('view-result').classList.add('hidden');
+            document.getElementById('view-teacher').classList.add('hidden');
+
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+
+            // Style active nav
+            const navLanding = document.getElementById('nav-landing');
+            const navTeacher = document.getElementById('nav-teacher');
+            if (viewName === 'teacher') {
+                navTeacher.className = "px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-medium transition flex items-center space-x-1.5 bg-white text-emerald-800 shadow";
+                navLanding.className = "px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-medium hover:bg-white/20 transition flex items-center space-x-1.5 text-white";
+                renderTeacherDashboard();
+            } else {
+                navLanding.className = "px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-medium transition flex items-center space-x-1.5 bg-white text-emerald-800 shadow";
+                navTeacher.className = "px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-medium hover:bg-white/20 transition flex items-center space-x-1.5 text-white";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function verifyTeacherAuth(e) {
+            e.preventDefault();
+            const pin = document.getElementById('teacher-pin').value;
+            if (pin === '1234') {
+                document.getElementById('teacher-auth-card').classList.add('hidden');
+                document.getElementById('teacher-main-content').classList.remove('hidden');
+                renderTeacherTable();
+                renderBankSoal('sel');
+            } else {
+                alert('PIN Salah! Masukkan PIN default Guru: 1234');
+            }
+        }
+
+        /* ==========================================================================
+           5. QUIZ ENGINE CONTROLLER
+           ========================================================================== */
+        function startAssessment(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('student-name').value.trim();
+            const studentClass = document.getElementById('student-class').value;
+            const absentNo = document.getElementById('student-absent').value;
+            const selectedTopic = document.querySelector('input[name="topic-selection"]:checked').value;
+
+            if (!name || !studentClass || !absentNo) {
+                alert('Mohon lengkapi seluruh formulir data siswa!');
+                return;
+            }
+
+            state.currentStudent = { name, studentClass, absentNo };
+            state.currentTopicKey = selectedTopic;
+            state.currentQuestionIdx = 0;
+            state.answersPG = {};
+            state.answersEssay = {};
+            state.doubtStatus = {};
+            state.examFinished = false;
+            state.timerSeconds = 45 * 60;
+
+            // UI Setups
+            document.getElementById('quiz-student-info').textContent = `${name} (${studentClass} / Absen: ${absentNo})`;
+            document.getElementById('quiz-topic-badge').textContent = `Materi: ${selectedTopic === 'sel' ? 'Sel' : 'Sistem Gerak'}`;
+
+            startTimer();
+            renderQuestionNavGrid();
+            renderQuestion();
+
+            switchView('quiz');
+        }
+
+        function startTimer() {
+            clearInterval(state.timerInterval);
+            state.timerInterval = setInterval(() => {
+                state.timerSeconds--;
+                if (state.timerSeconds <= 0) {
+                    clearInterval(state.timerInterval);
+                    alert('Waktu pengerjaan telah habis! Jawaban Anda disubmit otomatis.');
+                    finishQuiz();
+                    return;
+                }
+                const m = Math.floor(state.timerSeconds / 60);
+                const s = state.timerSeconds % 60;
+                document.getElementById('quiz-timer').textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function renderQuestionNavGrid() {
+            const topic = QUESTION_BANK[state.currentTopicKey];
+            const pgGrid = document.getElementById('grid-pg-numbers');
+            const essayGrid = document.getElementById('grid-essay-numbers');
+
+            pgGrid.innerHTML = '';
+            essayGrid.innerHTML = '';
+
+            let answeredCount = 0;
+
+            // PG Buttons (1-20)
+            topic.pg.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.className = getNavBtnClass(idx, q.id, false);
+                btn.textContent = idx + 1;
+                btn.onclick = () => jumpToQuestion(idx);
+                pgGrid.appendChild(btn);
+
+                if (state.answersPG[q.id] !== undefined) answeredCount++;
+            });
+
+            // Essay Buttons (21-25)
+            topic.essay.forEach((q, idx) => {
+                const realIdx = 20 + idx;
+                const btn = document.createElement('button');
+                btn.className = getNavBtnClass(realIdx, q.id, true);
+                btn.textContent = 21 + idx;
+                btn.onclick = () => jumpToQuestion(realIdx);
+                essayGrid.appendChild(btn);
+
+                if (state.answersEssay[q.id] && state.answersEssay[q.id].trim() !== '') answeredCount++;
+            });
+
+            document.getElementById('quiz-progress-text').textContent = `${answeredCount} / 25 Terjawab`;
+        }
+
+        function getNavBtnClass(questionIndex, qId, isEssay) {
+            let base = "w-full py-2 rounded-lg text-xs font-bold border transition transition-all cursor-pointer ";
+            const isCurrent = state.currentQuestionIdx === questionIndex;
+            const isDoubt = !!state.doubtStatus[qId];
+            const isAnswered = isEssay 
+                ? (state.answersEssay[qId] && state.answersEssay[qId].trim() !== '') 
+                : (state.answersPG[qId] !== undefined);
+
+            if (isCurrent) base += "ring-2 ring-slate-800 ring-offset-1 ";
+
+            if (isDoubt) {
+                return base + "bg-amber-400 text-slate-900 border-amber-500 font-extrabold";
+            } else if (isAnswered) {
+                return base + "bg-emerald-500 text-white border-emerald-600";
+            } else {
+                return base + "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200";
+            }
+        }
+
+        function jumpToQuestion(idx) {
+            state.currentQuestionIdx = idx;
+            renderQuestion();
+            renderQuestionNavGrid();
+        }
+
+        function navigateQuiz(dir) {
+            const nextIdx = state.currentQuestionIdx + dir;
+            if (nextIdx >= 0 && nextIdx < 25) {
+                jumpToQuestion(nextIdx);
+            }
+        }
+
+        function renderQuestion() {
+            const topic = QUESTION_BANK[state.currentTopicKey];
+            const idx = state.currentQuestionIdx;
+            const isPG = idx < 20;
+            const q = isPG ? topic.pg[idx] : topic.essay[idx - 20];
+
+            // Badge Info
+            document.getElementById('q-number-badge').textContent = `Soal #${idx + 1}`;
+            document.getElementById('q-type-badge').textContent = isPG ? "Pilihan Ganda" : "Soal Uraian / Essay";
+            document.getElementById('q-type-badge').className = isPG ? "bg-emerald-100 text-emerald-800 text-xs font-medium px-2.5 py-1 rounded-lg" : "bg-sky-100 text-sky-800 text-xs font-medium px-2.5 py-1 rounded-lg";
+            document.getElementById('q-diff-badge').textContent = isPG ? q.difficulty : "Uraian Guru";
+            document.getElementById('q-score-badge').textContent = isPG ? "Skor: 5 Poin" : "Skor Max: 5 Poin (Koreksi Guru)";
+            document.getElementById('q-indicator').textContent = q.indicator;
+            document.getElementById('q-text').textContent = q.question;
+
+            // Doubt Checkbox
+            document.getElementById('chk-doubt').checked = !!state.doubtStatus[q.id];
+
+            // Visual Diagram / SVG
+            const visualContainer = document.getElementById('q-visual-container');
+            if (isPG && q.svg) {
+                visualContainer.innerHTML = q.svg;
+                visualContainer.classList.remove('hidden');
+            } else {
+                visualContainer.classList.add('hidden');
+                visualContainer.innerHTML = '';
+            }
+
+            // Opsi PG vs Essay TextArea
+            const optionsContainer = document.getElementById('q-options-container');
+            const essayContainer = document.getElementById('q-essay-container');
+
+            if (isPG) {
+                optionsContainer.classList.remove('hidden');
+                essayContainer.classList.add('hidden');
+                optionsContainer.innerHTML = '';
+
+                const labels = ['A', 'B', 'C', 'D', 'E'];
+                q.options.forEach((optText, optIdx) => {
+                    const btn = document.createElement('button');
+                    const selected = state.answersPG[q.id] === optIdx;
+                    btn.className = `w-full text-left p-3.5 rounded-xl border border-slate-200 text-xs md:text-sm font-medium transition flex items-center space-x-3 quiz-option-btn ${selected ? 'selected' : ''}`;
+                    btn.onclick = () => selectPGOption(q.id, optIdx);
+                    btn.innerHTML = `
+                        <span class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${selected ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'}">${labels[optIdx]}</span>
+                        <span class="text-slate-800">${optText}</span>
+                    `;
+                    optionsContainer.appendChild(btn);
+                });
+            } else {
+                optionsContainer.classList.add('hidden');
+                essayContainer.classList.remove('hidden');
+                const essayInput = document.getElementById('q-essay-input');
+                essayInput.value = state.answersEssay[q.id] || '';
+                essayInput.oninput = (e) => {
+                    state.answersEssay[q.id] = e.target.value;
+                    renderQuestionNavGrid();
+                };
+            }
+
+            // Prev/Next Button enable/disable state
+            document.getElementById('btn-prev').disabled = idx === 0;
+            document.getElementById('btn-prev').style.opacity = idx === 0 ? "0.5" : "1";
+            document.getElementById('btn-next').disabled = idx === 24;
+            document.getElementById('btn-next').style.opacity = idx === 24 ? "0.5" : "1";
+        }
+
+        function selectPGOption(qId, optIdx) {
+            state.answersPG[qId] = optIdx;
+            renderQuestion();
+            renderQuestionNavGrid();
+        }
+
+        function toggleDoubtStatus() {
+            const topic = QUESTION_BANK[state.currentTopicKey];
+            const idx = state.currentQuestionIdx;
+            const q = idx < 20 ? topic.pg[idx] : topic.essay[idx - 20];
+            state.doubtStatus[q.id] = !state.doubtStatus[q.id];
+            renderQuestionNavGrid();
+        }
+
+        function confirmFinishQuiz() {
+            if (confirm("Apakah Anda yakin ingin menyelesaikan dan mengumpulkan hasil asesmen?")) {
+                finishQuiz();
+            }
+        }
+
+        /* ==========================================================================
+           6. RESULT CALCULATION & LOCALSTORAGE PERSISTENCE
+           ========================================================================== */
+        function finishQuiz() {
+            clearInterval(state.timerInterval);
+            state.examFinished = true;
+
+            const topic = QUESTION_BANK[state.currentTopicKey];
+            let correctCount = 0;
+
+            // Hitung Jawaban Benar PG
+            topic.pg.forEach(q => {
+                if (state.answersPG[q.id] === q.key) {
+                    correctCount++;
+                }
+            });
+
+            // Skor PG dalam skala 0-100 (20 Soal * 5 poin = 100)
+            const scorePG = correctCount * 5;
+
+            // Kategori Nilai Belajar
+            let category = "Perlu Bimbingan";
+            let feedback = "";
+            let categoryBg = "bg-rose-50 border-rose-200 text-rose-800";
+
+            if (scorePG >= 85) {
+                category = "Sangat Baik";
+                categoryBg = "bg-emerald-50 border-emerald-200 text-emerald-800";
+                feedback = "<strong>Luar Biasa!</strong> Anda telah menguasai seluruh indikator konsep Biologi ini dengan sangat matang. Pertahankan prestasi belajar Anda!";
+            } else if (scorePG >= 75) {
+                category = "Baik";
+                categoryBg = "bg-sky-50 border-sky-200 text-sky-800";
+                feedback = "<strong>Selamat!</strong> Anda telah mencapai batas Kriteria Ketuntasan Minimal (KKM). Teruskan belajar untuk memperdalam konsep yang belum sempurna.";
+            } else if (scorePG >= 60) {
+                category = "Cukup";
+                categoryBg = "bg-amber-50 border-amber-200 text-amber-800";
+                feedback = "<strong>Cukup Baik.</strong> Penguasaan materi Anda berada di tingkat sedang. Pelajari kembali materi dan pembahasan di bawah ini.";
+            } else {
+                category = "Perlu Bimbingan";
+                categoryBg = "bg-rose-50 border-rose-200 text-rose-800";
+                feedback = "<strong>Memerlukan Pengayaan.</strong> Hasil asesmen menunjukkan Anda perlu mengulang modul materi ini bersama Guru Ulpia Pelupessy, S.Pd.";
+            }
+
+            // Simpan Rekam Ujian ke LocalStorage
+            const newRecord = {
+                id: "REC-" + Date.now(),
+                studentName: state.currentStudent.name,
+                studentClass: state.currentStudent.studentClass,
+                absentNo: state.currentStudent.absentNo,
+                topicKey: state.currentTopicKey,
+                timestamp: new Date().toLocaleString('id-ID'),
+                scorePG: scorePG,
+                correctCount: correctCount,
+                totalPG: 20,
+                essayStatus: "Belum Dinilai",
+                essayScoreTotal: 0,
+                totalScore: scorePG, // Nilai PG menjadi nilai sementara
+                category: category,
+                answersPG: state.answersPG,
+                answersEssay: state.answersEssay
+            };
+
+            const currentRecords = JSON.parse(localStorage.getItem('biology_assessment_records')) || [];
+            currentRecords.unshift(newRecord);
+            localStorage.setItem('biology_assessment_records', JSON.stringify(currentRecords));
+
+            // Render Tampilan Hasil Siswa
+            document.getElementById('res-student-name').textContent = state.currentStudent.name;
+            document.getElementById('res-student-meta').textContent = `Kelas: ${state.currentStudent.studentClass} | No Absen: ${state.currentStudent.absentNo} | ${topic.title}`;
+            document.getElementById('res-score-pg').textContent = scorePG;
+            document.getElementById('res-correct-count').textContent = `${correctCount} / 20`;
+            document.getElementById('res-category').textContent = category;
+            
+            const fbBox = document.getElementById('res-feedback-box');
+            fbBox.className = `p-4 rounded-xl text-left text-xs md:text-sm leading-relaxed border ${categoryBg}`;
+            fbBox.innerHTML = feedback;
+
+            // Render Analisis Indikator & Pembahasan
+            renderIndicatorAnalysis(topic, state.answersPG);
+            renderDiscussionList(topic, state.answersPG);
+
+            switchView('result');
+        }
+
+        function renderIndicatorAnalysis(topic, answersPG) {
+            const container = document.getElementById('res-indicator-list');
+            container.innerHTML = '';
+
+            topic.pg.forEach((q, i) => {
+                const isCorrect = answersPG[q.id] === q.key;
+                const div = document.createElement('div');
+                div.className = "flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs gap-2";
+                div.innerHTML = `
+                    <div class="flex items-start space-x-2">
+                        <span class="w-5 h-5 rounded-full ${isCorrect ? 'bg-emerald-500' : 'bg-rose-500'} text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                            ${isCorrect ? '✓' : '✕'}
+                        </span>
+                        <div>
+                            <div class="font-bold text-slate-800">Soal #${i+1}: ${q.indicator}</div>
+                            <div class="text-slate-500">${q.question.substring(0, 80)}...</div>
+                        </div>
+                    </div>
+                    <span class="font-bold px-2.5 py-1 rounded-lg shrink-0 ${isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                        ${isCorrect ? '+5 Poin (Tuntas)' : '0 Poin (Belum Tuntas)'}
+                    </span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderDiscussionList(topic, answersPG) {
+            const container = document.getElementById('res-discussion-list');
+            container.innerHTML = '';
+
+            const labels = ['A', 'B', 'C', 'D', 'E'];
+
+            topic.pg.forEach((q, i) => {
+                const userAnsIdx = answersPG[q.id];
+                const isCorrect = userAnsIdx === q.key;
+                const userAnsText = userAnsIdx !== undefined ? `${labels[userAnsIdx]}. ${q.options[userAnsIdx]}` : "Tidak Dijawab";
+                const keyText = `${labels[q.key]}. ${q.options[q.key]}`;
+
+                const div = document.createElement('div');
+                div.className = "pt-4 first:pt-0 space-y-2 text-xs md:text-sm";
+                div.innerHTML = `
+                    <div class="font-bold text-slate-900 flex items-center space-x-2">
+                        <span class="px-2 py-0.5 ${isCorrect ? 'bg-emerald-600' : 'bg-rose-600'} text-white rounded text-xs">No. ${i+1}</span>
+                        <span>${q.question}</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                        <div class="p-2.5 rounded-lg border ${isCorrect ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900'}">
+                            <span class="font-semibold">Jawaban Anda:</span> ${userAnsText}
+                        </div>
+                        <div class="p-2.5 rounded-lg border bg-sky-50 border-sky-200 text-sky-900">
+                            <span class="font-semibold">Kunci Jawaban:</span> ${keyText}
+                        </div>
+                    </div>
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 leading-relaxed">
+                        <span class="font-bold text-slate-800"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> Pembahasan:</span> ${q.discussion}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        /* ==========================================================================
+           7. TEACHER DASHBOARD LOGIC (STATISTICS, TABLE, GRADING, EXPORT)
+           ========================================================================== */
+        function renderTeacherDashboard() {
+            renderTeacherTable();
+        }
+
+        function renderTeacherTable() {
+            const records = JSON.parse(localStorage.getItem('biology_assessment_records')) || [];
+            const search = document.getElementById('dash-search').value.toLowerCase();
+            const filterClass = document.getElementById('dash-filter-class').value;
+            const filterTopic = document.getElementById('dash-filter-topic').value;
+
+            const tbody = document.getElementById('teacher-table-body');
+            tbody.innerHTML = '';
+
+            let filtered = records.filter(r => {
+                const matchName = r.studentName.toLowerCase().includes(search);
+                const matchClass = filterClass === 'ALL' || r.studentClass === filterClass;
+                const matchTopic = filterTopic === 'ALL' || r.topicKey === filterTopic;
+                return matchName && matchClass && matchTopic;
+            });
+
+            // Update Statistik Dashboard
+            document.getElementById('stat-total-students').textContent = filtered.length;
+            if (filtered.length > 0) {
+                const avg = (filtered.reduce((acc, r) => acc + r.scorePG, 0) / filtered.length).toFixed(1);
+                const passed = filtered.filter(r => r.scorePG >= 75).length;
+                const passRate = Math.round((passed / filtered.length) * 100);
+                const max = Math.max(...filtered.map(r => r.scorePG));
+                const min = Math.min(...filtered.map(r => r.scorePG));
+
+                document.getElementById('stat-avg-score').textContent = avg;
+                document.getElementById('stat-pass-rate').textContent = `${passRate}%`;
+                document.getElementById('stat-max-score').textContent = max;
+                document.getElementById('stat-min-score').textContent = min;
+            } else {
+                document.getElementById('stat-avg-score').textContent = '0';
+                document.getElementById('stat-pass-rate').textContent = '0%';
+                document.getElementById('stat-max-score').textContent = '0';
+                document.getElementById('stat-min-score').textContent = '0';
+            }
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" class="p-6 text-center text-slate-400">Tidak ada rekam data asesmen siswa yang cocok.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach((r, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+                tr.innerHTML = `
+                    <td class="p-3.5 font-medium text-slate-400">${idx + 1}</td>
+                    <td class="p-3.5 font-bold text-slate-800">${r.studentName}</td>
+                    <td class="p-3.5">${r.studentClass}</td>
+                    <td class="p-3.5 font-mono">${r.absentNo}</td>
+                    <td class="p-3.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${r.topicKey === 'sel' ? 'bg-emerald-100 text-emerald-800' : 'bg-sky-100 text-sky-800'}">${r.topicKey === 'sel' ? 'Sel' : 'Sistem Gerak'}</span></td>
+                    <td class="p-3.5 font-bold ${r.scorePG >= 75 ? 'text-emerald-600' : 'text-rose-500'}">${r.scorePG}</td>
+                    <td class="p-3.5 font-bold text-sky-600">${r.essayScoreTotal} / 25</td>
+                    <td class="p-3.5 font-extrabold text-slate-900">${r.totalScore}</td>
+                    <td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${getCategoryBadgeClass(r.category)}">${r.category}</span></td>
+                    <td class="p-3.5 text-center">
+                        <button onclick="openGradingModal('${r.id}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-[11px] transition shadow flex items-center gap-1 mx-auto">
+                            <i class="fa-solid fa-pen-to-square"></i> <span>Koreksi</span>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function getCategoryBadgeClass(cat) {
+            if (cat === "Sangat Baik") return "bg-emerald-100 text-emerald-800 border border-emerald-300";
+            if (cat === "Baik") return "bg-sky-100 text-sky-800 border border-sky-300";
+            if (cat === "Cukup") return "bg-amber-100 text-amber-800 border border-amber-300";
+            return "bg-rose-100 text-rose-800 border border-rose-300";
+        }
+
+        /* Modul Penilaian Essay Guru */
+        function openGradingModal(recordId) {
+            state.gradingTargetRecordId = recordId;
+            const records = JSON.parse(localStorage.getItem('biology_assessment_records')) || [];
+            const record = records.find(r => r.id === recordId);
+            if (!record) return;
+
+            const topic = QUESTION_BANK[record.topicKey];
+            const modalContent = document.getElementById('grading-modal-content');
+            modalContent.innerHTML = `
+                <div class="bg-slate-50 p-3 rounded-xl border text-xs mb-3 space-y-1">
+                    <div class="font-bold text-slate-800">Siswa: ${record.studentName} (${record.studentClass})</div>
+                    <div class="text-slate-500">Materi Ujian: ${topic.title} | Skor PG: ${record.scorePG}</div>
+                </div>
+            `;
+
+            topic.essay.forEach((q, idx) => {
+                const studentAns = (record.answersEssay && record.answersEssay[q.id]) ? record.answersEssay[q.id] : "<em class='text-slate-400'>Siswa tidak menjawab</em>";
+                const div = document.createElement('div');
+                div.className = "p-4 border border-slate-200 rounded-xl space-y-2 text-xs";
+                div.innerHTML = `
+                    <div class="font-bold text-slate-800">Soal Uraian #${21 + idx}: ${q.question}</div>
+                    <div class="p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-amber-900">
+                        <span class="font-semibold">Panduan Penilaian Guru:</span> ${q.guide}
+                    </div>
+                    <div class="p-2.5 bg-slate-100 rounded-lg text-slate-800">
+                        <span class="font-semibold text-slate-600 block mb-1">Jawaban Teks Siswa:</span>
+                        ${studentAns}
+                    </div>
+                    <div class="flex items-center space-x-2 pt-1">
+                        <label class="font-semibold text-slate-700">Berikan Skor (0 - 5 Poin):</label>
+                        <input type="number" min="0" max="5" id="essay-score-input-${q.id}" value="5" class="w-20 px-3 py-1 border border-slate-300 rounded-lg font-bold text-slate-800 outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                `;
+                modalContent.appendChild(div);
+            });
+
+            document.getElementById('modal-grading').classList.remove('hidden');
+        }
+
+        function closeGradingModal() {
+            document.getElementById('modal-grading').classList.add('hidden');
+        }
+
+        function saveEssayGrading() {
+            const records = JSON.parse(localStorage.getItem('biology_assessment_records')) || [];
+            const recordIdx = records.findIndex(r => r.id === state.gradingTargetRecordId);
+            if (recordIdx === -1) return;
+
+            const record = records[recordIdx];
+            const topic = QUESTION_BANK[record.topicKey];
+
+            let totalEssayScore = 0; // Max 25 (5 Soal * 5 Poin)
+            topic.essay.forEach(q => {
+                const val = parseInt(document.getElementById(`essay-score-input-${q.id}`).value) || 0;
+                totalEssayScore += Math.min(5, Math.max(0, val));
+            });
+
+            // Bobot Nilai Total: 70% PG + 30% Essay
+            // Skor PG max 100, Skor Essay max 25 (dikonversi ke 100 dulu)
+            const essayScaled = (totalEssayScore / 25) * 100;
+            const finalScore = Math.round((record.scorePG * 0.7) + (essayScaled * 0.3));
+
+            let category = "Perlu Bimbingan";
+            if (finalScore >= 85) category = "Sangat Baik";
+            else if (finalScore >= 75) category = "Baik";
+            else if (finalScore >= 60) category = "Cukup";
+
+            records[recordIdx].essayStatus = "Sudah Dinilai";
+            records[recordIdx].essayScoreTotal = totalEssayScore;
+            records[recordIdx].totalScore = finalScore;
+            records[recordIdx].category = category;
+
+            localStorage.setItem('biology_assessment_records', JSON.stringify(records));
+
+            closeGradingModal();
+            renderTeacherTable();
+            alert("Nilai Essay berhasil diperbarui secara permanen!");
+        }
+
+        /* Export Data ke File CSV/Excel */
+        function exportToCSV() {
+            const records = JSON.parse(localStorage.getItem('biology_assessment_records')) || [];
+            if (records.length === 0) {
+                alert("Tidak ada data hasil asesmen untuk diexport!");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "No,Nama Siswa,Kelas,No Absen,Materi Ujian,Skor PG,Skor Essay (0-25),Nilai Akhir (0-100),Kategori,Tanggal Waktu\n";
+
+            records.forEach((r, i) => {
+                const topicName = r.topicKey === 'sel' ? "Materi Sel" : "Sistem Gerak Manusia";
+                const row = `"${i+1}","${r.studentName}","${r.studentClass}","${r.absentNo}","${topicName}","${r.scorePG}","${r.essayScoreTotal}","${r.totalScore}","${r.category}","${r.timestamp}"`;
+                csvContent += row + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Rekap_Nilai_Biologi_SMAS_Alhilaal_${Date.now()}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function clearAllData() {
+            if (confirm("Apakah Anda yakin ingin menghapus seluruh data hasil ujian siswa di browser ini? Tindakan ini tidak dapat dibatalkan!")) {
+                localStorage.removeItem('biology_assessment_records');
+                renderTeacherTable();
+            }
+        }
+
+        /* Bank Soal Viewer */
+        function renderBankSoal(topicKey) {
+            document.getElementById('tab-bank-sel').className = topicKey === 'sel' ? "px-4 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white" : "px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200";
+            document.getElementById('tab-bank-gerak').className = topicKey === 'gerak' ? "px-4 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white" : "px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200";
+
+            const topic = QUESTION_BANK[topicKey];
+            const container = document.getElementById('bank-soal-content');
+            container.innerHTML = '';
+
+            const labels = ['A', 'B', 'C', 'D', 'E'];
+
+            // PG
+            topic.pg.forEach((q, i) => {
+                const div = document.createElement('div');
+                div.className = "p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5";
+                div.innerHTML = `
+                    <div class="font-bold text-slate-800">PG #${i+1}: ${q.question}</div>
+                    <div class="text-emerald-700 font-semibold">Indikator: ${q.indicator}</div>
+                    <div class="text-slate-600">Kunci Jawaban: <span class="font-bold text-slate-800">${labels[q.key]}. ${q.options[q.key]}</span></div>
+                `;
+                container.appendChild(div);
+            });
+
+            // Essay
+            topic.essay.forEach((q, i) => {
+                const div = document.createElement('div');
+                div.className = "p-3 bg-amber-50/60 border border-amber-200 rounded-xl space-y-1.5";
+                div.innerHTML = `
+                    <div class="font-bold text-amber-950">Essay #${21+i}: ${q.question}</div>
+                    <div class="text-amber-800">Panduan Guru: ${q.guide}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        /* Modals */
+        function showGuideModal() { document.getElementById('modal-guide').classList.remove('hidden'); }
+        function closeGuideModal() { document.getElementById('modal-guide').classList.add('hidden'); }
+    </script>
+</body>
+</html>
